@@ -442,7 +442,8 @@ namespace MyNamespace
 
         public override async Task ReportsDiagnostics_WhenSettingValueForNonVirtualMember_InLocalFunction(string method)
         {
-            var source = $@"using NSubstitute;
+            var source = $@"using System.Threading.Tasks;
+using NSubstitute;
 
 namespace MyNamespace
 {{
@@ -461,9 +462,10 @@ namespace MyNamespace
             int i = 0;
             var substitute = NSubstitute.Substitute.For<Foo>();
 
-            void SubstituteCall(Foo sub)
+            Task SubstituteCall(Foo sub)
             {{
                 [|sub.Bar(Arg.Any<int>())|];
+                return Task.CompletedTask;
             }}
 
             {method}(substitute, SubstituteCall).Do(callInfo => i++);
@@ -476,7 +478,8 @@ namespace MyNamespace
 
         public override async Task ReportsDiagnostics_WhenSettingValueForNonVirtualMember_InExpressionBodiedLocalFunction(string method)
         {
-            var source = $@"using NSubstitute;
+            var source = $@"using System.Threading.Tasks;
+using NSubstitute;
 
 namespace MyNamespace
 {{
@@ -495,7 +498,7 @@ namespace MyNamespace
             int i = 0;
             var substitute = NSubstitute.Substitute.For<Foo>();
 
-            void SubstituteCall(Foo sub) => [|sub.Bar(Arg.Any<int>())|];
+            Task SubstituteCall(Foo sub) => Task.FromResult([|sub.Bar(Arg.Any<int>())|]);
 
             {method}(substitute, SubstituteCall).Do(callInfo => i++);
             substitute.Bar(1);
@@ -508,7 +511,8 @@ namespace MyNamespace
 
         public override async Task ReportsDiagnostics_WhenSettingValueForNonVirtualMember_InRegularFunction(string method)
         {
-            var source = $@"using NSubstitute;
+            var source = $@"using System.Threading.Tasks;
+using NSubstitute;
 
 namespace MyNamespace
 {{
@@ -531,9 +535,10 @@ namespace MyNamespace
             substitute.Bar(1);
         }}
 
-        private void SubstituteCall(Foo sub)
+        private Task SubstituteCall(Foo sub)
         {{
             var objBarr = [|sub.Bar(Arg.Any<int>())|];
+            return Task.CompletedTask;
         }}
     }}
 }}";
@@ -542,7 +547,8 @@ namespace MyNamespace
 
         public override async Task ReportsDiagnostics_WhenSettingValueForNonVirtualMember_InRegularExpressionBodiedFunction(string method)
         {
-            var source = $@"using NSubstitute;
+            var source = $@"using System.Threading.Tasks;
+using NSubstitute;
 
 namespace MyNamespace
 {{
@@ -565,7 +571,7 @@ namespace MyNamespace
             substitute.Bar(1);
         }}
 
-        private void SubstituteCall(Foo sub) => [|sub.Bar(Arg.Any<int>())|];
+        private Task SubstituteCall(Foo sub) => Task.FromResult([|sub.Bar(Arg.Any<int>())|]);
     }}
 }}";
             await VerifyDiagnostic(source, NonVirtualWhenSetupSpecificationDescriptor, "Member Bar can not be intercepted. Only interface members and virtual, overriding, and abstract members can be intercepted.");
@@ -573,7 +579,8 @@ namespace MyNamespace
 
         public override async Task ReportsNoDiagnostics_WhenSettingValueForVirtualMember_InLocalFunction(string method)
         {
-            var source = $@"using NSubstitute;
+            var source = $@"using System.Threading.Tasks;
+using NSubstitute;
 
 namespace MyNamespace
 {{
@@ -592,9 +599,10 @@ namespace MyNamespace
             int i = 0;
             var substitute = NSubstitute.Substitute.For<Foo>();
 
-            void SubstituteCall(Foo sub)
+            Task SubstituteCall(Foo sub)
             {{
                 sub.Bar(Arg.Any<int>());
+                return Task.CompletedTask;
             }}
 
             {method}(substitute, SubstituteCall).Do(callInfo => i++);
@@ -608,7 +616,8 @@ namespace MyNamespace
 
         public override async Task ReportsNoDiagnostics_WhenSettingValueForVirtualMember_InExpressionBodiedLocalFunction(string method)
         {
-            var source = $@"using NSubstitute;
+            var source = $@"using System.Threading.Tasks;
+using NSubstitute;
 
 namespace MyNamespace
 {{
@@ -627,7 +636,7 @@ namespace MyNamespace
             int i = 0;
             var substitute = NSubstitute.Substitute.For<Foo>();
 
-            void SubstituteCall(Foo sub) => sub.Bar(Arg.Any<int>());
+            Task SubstituteCall(Foo sub) => Task.FromResult(sub.Bar(Arg.Any<int>()));
 
             {method}(substitute, SubstituteCall).Do(callInfo => i++);
             substitute.Bar(1);
@@ -639,7 +648,8 @@ namespace MyNamespace
 
         public override async Task ReportsNoDiagnostics_WhenSettingValueForVirtualMember_InRegularFunction(string method)
         {
-            var source = $@"using NSubstitute;
+            var source = $@"using System.Threading.Tasks;
+using NSubstitute;
 
 namespace MyNamespace
 {{
@@ -662,9 +672,10 @@ namespace MyNamespace
             substitute.Bar(1);
         }}
 
-        private void SubstituteCall(Foo sub)
+        private Task SubstituteCall(Foo sub)
         {{
             var objBarr = sub.Bar(Arg.Any<int>());
+            return Task.CompletedTask;
         }}
     }}
 }}";
@@ -673,7 +684,8 @@ namespace MyNamespace
 
         public override async Task ReportsNoDiagnostics_WhenSettingValueForVirtualMember_InRegularExpressionBodiedFunction(string method)
         {
-            var source = $@"using NSubstitute;
+            var source = $@"using System.Threading.Tasks;
+using NSubstitute;
 
 namespace MyNamespace
 {{
@@ -696,7 +708,7 @@ namespace MyNamespace
             substitute.Bar(1);
         }}
 
-        private void SubstituteCall(Foo sub) => sub.Bar(Arg.Any<int>());
+        private Task SubstituteCall(Foo sub) => Task.FromResult(sub.Bar(Arg.Any<int>()));
     }}
 }}";
             await VerifyNoDiagnostic(source);

@@ -49,7 +49,7 @@ namespace NSubstitute.Analyzers.Tests.Shared.DiagnosticAnalyzers
 
         static DiagnosticVerifier()
         {
-            var referencedAssemblies = typeof(Substitute).Assembly.GetReferencedAssemblies();
+            var referencedAssemblies = typeof(DiagnosticAnalyzer).Assembly.GetReferencedAssemblies();
             var systemRuntimeReference = GetAssemblyReference(referencedAssemblies, "System.Runtime");
             var systemThreadingTasksReference = GetAssemblyReference(referencedAssemblies, "System.Threading.Tasks");
             MetadataReferences = new[]

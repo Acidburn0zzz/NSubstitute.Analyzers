@@ -189,6 +189,14 @@ namespace NSubstitute.Analyzers.Shared
                 defaultSeverity: DiagnosticSeverity.Warning,
                 isEnabledByDefault: true);
 
+        public static DiagnosticDescriptor AwaitedWhenCall { get; } =
+            CreateDiagnosticDescriptor(
+                name: nameof(AwaitedWhenCall),
+                id: DiagnosticIdentifiers.AwaitedWhenCall,
+                category: DiagnosticCategory.Usage.GetDisplayName(),
+                defaultSeverity: DiagnosticSeverity.Warning,
+                isEnabledByDefault: true);
+
         private static DiagnosticDescriptor CreateDiagnosticDescriptor(
             string name, string id, string category, DiagnosticSeverity defaultSeverity, bool isEnabledByDefault)
         {
