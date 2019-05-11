@@ -27,6 +27,6 @@
         public const string ReEntrantSubstituteCall = "NS4000";
 
         public const string UnusedReceived = "NS5000";
-        public const string AwaitedWhenCall = "NS5002";
+        public const string AwaitedWhenCall = "NS5001";
     }
 }

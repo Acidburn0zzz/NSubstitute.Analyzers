@@ -363,7 +363,7 @@
         <comment>The title of the diagnostic.</comment>
   </data>
     <data name="AwaitedWhenCallDescription" xml:space="preserve">
-    <value>Awaited when call.</value>
+    <value>Awaited When call.</value>
         <comment>An optional longer localizable description of the diagnostic.</comment>
   </data>
     <data name="AwaitedWhenCallMessageFormat" xml:space="preserve">
